@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="mb-4">My Habits</h1>
+    
+    {% for habit in habits %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="card-title h4">{{ habit.name }}</h2>
+                <p class="card-text">{{ habit.description }}</p>
+                <p class="card-text text-muted">
+                    Goal: <strong>{{ habit.goal_value }}x</strong> ({{ habit.frequency_type }})
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}
