@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="text-center mt-5">
+        <h1 class="display-1 text-danger fw-bold">{{ status_code }}</h1>
+        
+        <h2 class="mb-4">Oops! Something went wrong.</h2>
+        
+        <p class="lead text-muted">{{ message }}</p>
+        
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-4">
+            &larr; Return to Dashboard
+        </a>
+    </div>
+{% endblock content %}
