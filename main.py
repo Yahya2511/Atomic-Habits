@@ -1,7 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
 
 app = FastAPI()
 
@@ -45,8 +44,8 @@ habit_logs = [
     }
 ]
 
-@app.get("/", include_in_schema=False)
-@app.get("/habits", include_in_schema=False)
+@app.get("/", include_in_schema=False, name="home")
+@app.get("/habits", include_in_schema=False, name="habits")
 def home(request: Request):
     return templates.TemplateResponse(
         request,
@@ -54,6 +53,25 @@ def home(request: Request):
         {"habits": habits}
     )
 
+@app.get("/habits/{habit_id}", include_in_schema=False, name="habit_page")
+def habit_page(request: Request, habit_id: int):
+    for habit in habits:
+        if habit.get("id") == habit_id:
+            return templates.TemplateResponse(
+                request,
+                "habit.html",
+                {"habit": habit}
+            )
+            
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Habit not found")
+
 @app.get("/api/habits")
 def get_habits():
     return habits
+
+@app.get("/api/habits/{habit_id}")
+def get_habit(habit_id: int):
+    for habit in habits:
+        if habit.get("id") == habit_id:
+            return habit
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Habit not found")

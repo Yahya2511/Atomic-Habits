@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title text-primary">{{ habit.name }}</h1>
+            
+            <h5 class="text-muted mb-3">Goal: {{ habit.goal_value }}x ({{ habit.frequency_type }})</h5>
+            
+            <p class="card-text lead">{{ habit.description }}</p>
+            
+            <hr>
+            
+            <p class="text-muted small">Created on: {{ habit.created_at }}</p>
+            
+            <div class="mt-4">
+                <button class="btn btn-outline-secondary btn-sm">Edit Habit</button>
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <a href="/" class="btn btn-primary">&larr; Back to Dashboard</a>
+{% endblock content %}
