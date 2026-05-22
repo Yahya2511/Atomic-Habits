@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as starletteHTTPException
+from schemas import HabitCreate, HabitResponse
 
 app = FastAPI()
 
@@ -68,11 +69,29 @@ def habit_page(request: Request, habit_id: int):
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Habit not found")
 
-@app.get("/api/habits")
+@app.get("/api/habits", response_model=list[HabitResponse])
 def get_habits():
     return habits
 
-@app.get("/api/habits/{habit_id}")
+@app.post(
+    "/api/habits",
+    response_model=HabitCreate,
+    status_code=status.HTTP_201_CREATED
+)
+def create_habit(habit: HabitCreate):
+    new_id = max(h["id"] for h in habits) + 1 if habits else 1
+    new_habit = {
+        "id": new_id,
+        "name": habit.name,
+        "description": habit.description,
+        "frequency_type": habit.frequency_type,
+        "goal_value": habit.goal_value,
+        "created_at": "2026-05-19T09:30:00"
+    }
+    habits.append(new_habit)
+    return new_habit
+
+@app.get("/api/habits/{habit_id}", response_model=HabitResponse)
 def get_habit(habit_id: int):
     for habit in habits:
         if habit.get("id") == habit_id:
