@@ -3,22 +3,38 @@
 {% block content %}
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
-            <h1 class="card-title text-primary">{{ habit.name }}</h1>
             
-            <h5 class="text-muted mb-3">Goal: {{ habit.goal_value }}x ({{ habit.frequency_type }})</h5>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h1 class="card-title text-primary mb-0">{{ habit.name }}</h1>
+                {% if habit.creator_id == 1 %}
+                    <span class="badge bg-success fs-6">Host</span>
+                {% else %}
+                    <span class="badge bg-secondary fs-6">Follower</span>
+                {% endif %}
+            </div>
+            
+            <h5 class="text-muted mb-3">Schedule Mask: {{ habit.schedule_mask }}</h5>
             
             <p class="card-text lead">{{ habit.description }}</p>
             
             <hr>
             
-            <p class="text-muted small">Created on: {{ habit.created_at }}</p>
+            <p class="text-muted small">
+                Experiment Timeline: {{ habit.start_date.strftime('%Y-%m-%d') }} 
+                {% if habit.end_date %} to {{ habit.end_date.strftime('%Y-%m-%d') }} {% endif %}
+            </p>
             
             <div class="mt-4">
-                <button class="btn btn-outline-secondary btn-sm">Edit Habit</button>
-                <button class="btn btn-outline-danger btn-sm">Delete</button>
+                {% if habit.creator_id == 1 %}
+                    <button class="btn btn-outline-secondary btn-sm">Edit Experiment</button>
+                    <button class="btn btn-outline-danger btn-sm">Delete Party</button>
+                {% else %}
+                    <button class="btn btn-outline-warning btn-sm">Leave Party</button>
+                {% endif %}
             </div>
+            
         </div>
     </div>
     
-    <a href="/" class="btn btn-primary">&larr; Back to Dashboard</a>
+    <a href="{{ url_for('home') }}" class="btn btn-primary">&larr; Back to Dashboard</a>
 {% endblock content %}

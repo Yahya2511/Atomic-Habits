@@ -1,19 +1,30 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1 class="mb-4">My Habits</h1>
+    <h1 class="mb-4">My Party Experiments</h1>
     
     {% for habit in habits %}
         <div class="card mb-3">
             <div class="card-body">
                 
-                <a href="{{ url_for('habit_page', habit_id=habit.id) }}" class="text-decoration-none">
-                    <h2 class="card-title h4">{{ habit.name }}</h2>
-                </a>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('habit_page', habit_id=habit.id) }}" class="text-decoration-none">
+                        <h2 class="card-title h4">{{ habit.name }}</h2>
+                    </a>
+                    
+                    {% if habit.creator_id == 1 %}
+                        <span class="badge bg-success">Host</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Follower</span>
+                    {% endif %}
+                </div>
                 
-                <p class="card-text">{{ habit.description }}</p>
-                <p class="card-text text-muted">
-                    Goal: <strong>{{ habit.goal_value }}x</strong> ({{ habit.frequency_type }})
+                <p class="card-text mt-2">{{ habit.description }}</p>
+                <p class="card-text text-muted mb-0">
+                    <small>
+                        Start: {{ habit.start_date.strftime('%Y-%m-%d') }} 
+                        {% if habit.end_date %} | End: {{ habit.end_date.strftime('%Y-%m-%d') }} {% endif %}
+                    </small>
                 </p>
             </div>
         </div>
